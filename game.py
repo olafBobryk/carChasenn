@@ -1,4 +1,3 @@
-from copy import copy
 from math import floor
 from random import random
 import numpy as np
@@ -62,12 +61,14 @@ class Game():
             new.append([])
             for y in range(len(self.state[x])):
                 new[x].append(0)
+
+
+        for x in range(len(self.state)):
+            for y in range(len(self.state[x])):
                 try:
                     if self.state[x][y - 1] == 1:
 
-                        change = {'left' : 1,'right' : -1,'none' : 0}[dir]
-
-                        print(change)
+                        change = {'right' : 1,'left' : -1,'none' : 0}[dir]
 
                         if new[x + change][y - 1] == 2:
                             self.done = True
@@ -76,11 +77,11 @@ class Game():
                         else:
                             new[x + change][y - 1] = self.state[x][y - 1]
                     else:
-                        new[x][y] = self.state[x][y - 1]
-                except:
+                        if not new[x][y] == 1:
+                            new[x][y] = self.state[x][y - 1]
+                except Exception as e:
+                    self.done = True
                     ...
-
-
 
         if self.frame % 10 == 0:
             new[floor(random() * len(self.state))][0] = 2
