@@ -22,17 +22,29 @@ class Game():
     def nextTurn(self,network):
         if self.done: return 
 
+        temp = copy.deepcopy(self.state)
+
+        index = index_2d(temp,1)
+
+        offset = 11 - 12
+
+        if offset < 0:
+            for x in range(abs(offset)):
+                temp.insert(0,[3 for i in range(len(self.state[0]))])
+                del temp[-1]
+
+        if offset > 0:
+            for x in range(abs(offset)):
+                temp.append([3 for i in range(len(self.state[0]))])
+                del temp[0]
+
+
         
-        inputs = np.array(self.state)
+        inputs = np.array(temp)
 
         inputs = inputs.ravel()
 
         inputs = [x / 3 for x in inputs]
-
-        if index_2d(self.state,2)[0] == None:
-            inputs.append(0)
-        else:
-            inputs.append((index_2d(self.state,2)[0] + 1) / 24)
 
         outputs = network.calculate(inputs)
 
