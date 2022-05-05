@@ -81,7 +81,6 @@ class Game():
                             new[x][y] = self.state[x][y - 1]
                 except Exception as e:
                     self.done = True
-                    ...
 
         if self.frame % 10 == 0:
             new[floor(random() * len(self.state))][0] = 2
