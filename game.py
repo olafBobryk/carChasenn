@@ -113,7 +113,7 @@ class Game():
         except:
             self.done = True
 
-        if self.frame % 5 == 0:
+        if self.frame % 8 == 0:
             pos = random() * (len(self.state) - 1)
 
             new[floor(pos + 0)][0] = 3
@@ -127,11 +127,19 @@ class Game():
             new[floor(pos2 + 0)][0] = 3
             new[floor(pos2 + 1)][0] = 3
 
+            pos3 = random() * (len(self.state) - 1)
 
-        if self.frame % 40 == 2:
-            pos = random() * len(self.state)
+            while pos3 == pos or pos3 + 1 == pos or pos3 - 1 == pos or pos3 == pos2 or pos3 + 1 == pos2 or pos3 - 1 == pos2:
+                pos3 = random() * (len(self.state) - 1)
 
-            new[floor(pos + 0)][0] = 2
+            new[floor(pos3 + 0)][0] = 3
+            new[floor(pos3 + 1)][0] = 3
+
+
+        # if self.frame % 40 == 2:
+        #     pos = random() * len(self.state)
+
+        #     new[floor(pos + 0)][0] = 2
 
 
         self.frame += 1
