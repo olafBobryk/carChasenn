@@ -1,6 +1,7 @@
 from math import floor
 from random import random
 import numpy as np
+import copy
 
 class Game():
     def __init__(self):
@@ -8,6 +9,7 @@ class Game():
         self.frame = 0;
         self.score = 0;
         self.done = False;
+        self.record = [];
 
         for x in range(24):
             self.state.append([])
@@ -89,6 +91,8 @@ class Game():
         self.score += 1 
 
         self.state = new
+
+        self.record.append(copy.deepcopy(self.state))
 
 
 

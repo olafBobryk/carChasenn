@@ -17,7 +17,7 @@ class Pool():
             })
 
 
-    def live(self):
+    def live(self,record):
         while True:
             done = True
 
@@ -32,14 +32,14 @@ class Pool():
 
             if done: break
 
-        self.nextGeneration();
+        return self.nextGeneration(record);
 
-    def nextGeneration(self):
+    def nextGeneration(self,record):
 
         self.population = sorted(self.population, key=lambda d: d['game'].score) 
         self.population.reverse()
 
-        print(self.population[0]['game'].score)
+        record = self.population[0]['game'].record
 
         nextPopulation = [];
 
@@ -67,6 +67,8 @@ class Pool():
 
         self.generation += 1
         self.population  = nextPopulation
+
+        return record
     
 
 

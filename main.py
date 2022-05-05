@@ -3,20 +3,33 @@ import pygame
 from network import Network
 from game import Game, drawState
 from functions import *
+from threading import Thread
 
 pool = Pool()
+record = False;
+
+def action(record):
+    record = pool.live(record)
+
+def drawGameState(record):
+    if record:
+        ...
+
+
+if __name__ == '__main__':
+    Thread(target = action, args =(record,)).start()
+    Thread(target = drawGameState, args =(record,)).start()
+    # Thread(target = func2).start()
 
 # pair = {
 #     'network': Network([864,2,3]),
 #     'game': Game()
 # }
 
-def action():
-    pool.live();
     # pair.get('game').nextTurn(pair.get('network'))
 
 
-setInterval(1 / 2,action)
+# setInterval(1 / 2,action)
 
 
 
