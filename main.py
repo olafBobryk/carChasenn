@@ -8,7 +8,7 @@ import time
 
 pygame.init()
 
-screen = pygame.display.set_mode((24 * 10,36 * 10))
+screen = pygame.display.set_mode((24 * 10 + 240 * 2,36 * 10))
 
 pygame.display.set_caption("carChasenn")
 
@@ -45,6 +45,7 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit()
+
     if 0 < len(data):
 
 

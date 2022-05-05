@@ -108,17 +108,25 @@ class Game():
                 self.done = True
             else:
                 if new[index[0] + change][index[1] - speed] == 2:
-                    self.score += 50
+                    self.score += 35
                 new[index[0] + change][index[1] - speed] = self.state[index[0]][index[1] - speed]
         except:
             self.done = True
 
         if self.frame % 5 == 0:
-            pos = random() * (len(self.state) - 2)
+            pos = random() * (len(self.state) - 1)
 
             new[floor(pos + 0)][0] = 3
             new[floor(pos + 1)][0] = 3
-            new[floor(pos + 2)][0] = 3
+
+            pos2 = random() * (len(self.state) - 1)
+
+            while pos2 == pos or pos2 + 1 == pos or pos2 - 1 == pos:
+                pos2 = random() * (len(self.state) - 1)
+
+            new[floor(pos2 + 0)][0] = 3
+            new[floor(pos2 + 1)][0] = 3
+
 
         if self.frame % 40 == 2:
             pos = random() * len(self.state)
@@ -145,8 +153,9 @@ def drawState(screen,pygame,data,frame):
 
     state = data['record'][frame]
     genration = data['generation']
+    net = data['network']
 
-    res = screen.get_width() / len(state)
+    res = 240 / len(state)
 
     for x in range(len(state)):
         for y in range(len(state[x])):
@@ -162,6 +171,38 @@ def drawState(screen,pygame,data,frame):
 
     label = font.render(str(genration) + ' ' + str(data['score']), 1, (0,0,0))
     screen.blit(label, (0,0))
+
+    pygame.draw.rect(screen, [200,200,200], (240,0,720,360))
+
+    for i in range(len(net[0])):
+        pygame.draw.circle(screen, [10,10,10], [240 + 50,0 + 10 + i * 12.5],5);
+
+        if math.sqrt((240 + 50 - pygame.mouse.get_pos()[0]) ** 2 + (0 + 10 + i * 12.5 - pygame.mouse.get_pos()[1]) ** 2) < 5:
+            for x in range(len(state)):
+                for y in range(len(state[x])):
+
+                    col = net[0][i]['weights'][x * 36 + y]
+
+                    if col < 0:
+                        col = (255 * abs(col),0,0)
+                    elif col > 0:
+                        col = (0,255 * abs(col),0)
+                    else: 
+                        col = (0,0,0)
+
+                    s = pygame.Surface((res,res))
+                    s.set_alpha(128)                # alpha level
+                    s.fill(col)           # this fills the entire surface
+                    screen.blit(s, (x * res, y * res)) 
+
+
+                    # pygame.draw.rect(screen, col, (x * res, y * res, x * res + res, y * res + res))
+
+
+
+
+
+
 
 def index_2d(myList, v):
     for i, x in enumerate(myList):

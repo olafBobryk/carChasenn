@@ -13,7 +13,7 @@ class Pool():
         for i in range(30):
             self.population.append({
                 'game': Game(),
-                'network': Network([864,24,3])
+                'network': Network([864,3,3])
             })
 
 
@@ -41,6 +41,7 @@ class Pool():
 
         record = self.population[0]['game'].record
         score =  self.population[0]['game'].score
+        network = self.population[0]['network'].net
 
         nextPopulation = [];
 
@@ -72,7 +73,8 @@ class Pool():
         return {
             'record': record,
             'generation': self.generation,
-            'score': score
+            'score': score,
+            'network': network
         }
 
 
