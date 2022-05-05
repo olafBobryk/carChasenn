@@ -18,15 +18,15 @@ screen.fill((0,0,0))
 
 pool = Pool()
 global data
-data = False
+data = []
 
 def action():
     while True:
         global data
-        if data:
-            pool.live(data)
+        if len(data) > 1:
+            pool.live()
         else:
-            data = pool.live(data)
+            data.append(pool.live())
 
 frame = 0
 
@@ -45,21 +45,20 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit()
-    if data:
+    if 0 < len(data):
 
 
-        drawState(screen,pygame,data,frame)
+        drawState(screen,pygame,data[0],frame)
         
         pygame.display.update()
 
         frame += 1
 
-        if frame >= len(data['record']):
+        if frame >= len(data[0]['record']):
+
             frame = 0
-            data = False
+            del data[0]
 
-
-setInterval(1 / 2,action=show)
 
 
 

@@ -2,6 +2,7 @@ from math import floor
 from random import random
 import numpy as np
 import copy
+import math
 
 class Game():
     def __init__(self):
@@ -26,7 +27,12 @@ class Game():
 
         inputs = inputs.ravel()
 
-        inputs = [x / 2 for x in inputs]
+        inputs = [x / 3 for x in inputs]
+
+        if index_2d(self.state,2)[0] == None:
+            inputs.append(0)
+        else:
+            inputs.append((index_2d(self.state,2)[0] + 1) / 24)
 
         outputs = network.calculate(inputs)
 
@@ -51,6 +57,8 @@ class Game():
             'val': inputs[2]
         }]
 
+        speed = 1# math.floor(inputs[3] * 3)
+
         dir = sorted(dir, key=lambda d: d['val'])[0]['dir']
         
 
@@ -66,51 +74,45 @@ class Game():
 
         index = index_2d(new,1)
 
+        if index == None:
+            self.done = True
+            self.state = new
+
+            self.record.append(copy.deepcopy(self.state))
+            return
+            
+
         new[index[0]][index[1]] = 0;
         
         change = {'right' : 1,'left' : -1,'none' : 0}[dir]
 
 
         try:
-            if new[index[0] + change][index[1] - 1] == 2:
+            if new[index[0] + change][index[1] - speed] == 3:
                 self.done = True
-            elif index[0] + change < 0 or index[0] + change >= len(self.state[0]):
+            elif index[0] + change < 0 or index[0] + change >= len(self.state):
+                self.done = True
+            elif index[1] - speed < 0 or index[1] - speed >= len(self.state[0]):
                 self.done = True
             else:
-                new[index[0] + change][index[1] - 1] = self.state[index[0]][index[1] - 1]
+                if new[index[0] + change][index[1] - speed] == 2:
+                    self.score += 50
+                new[index[0] + change][index[1] - speed] = self.state[index[0]][index[1] - speed]
         except:
             self.done = True
 
+        if self.frame % 5 == 0:
+            pos = random() * (len(self.state) - 2)
 
+            new[floor(pos + 0)][0] = 3
+            new[floor(pos + 1)][0] = 3
+            new[floor(pos + 2)][0] = 3
 
+        if self.frame % 40 == 2:
+            pos = random() * len(self.state)
 
-        # for x in range(len(self.state)):
-        #     new.append([])
-        #     for y in range(len(self.state[x])):
-        #         new[x].append(0)
+            new[floor(pos + 0)][0] = 2
 
-
-        # for x in range(len(self.state)):
-        #     for y in range(len(self.state[x])):
-        #         try:
-        #             if self.state[x][y - 1] == 1:
-
-        #                 change = {'right' : 1,'left' : -1,'none' : 0}[dir]
-
-        #                 if new[x + change][y - 1] == 2:
-        #                     self.done = True
-        #                 elif x + change < 0 or x + change >= len(self.state[0]):
-        #                     self.done = True
-        #                 else:
-        #                     new[x + change][y - 1] = self.state[x][y - 1]
-        #             else:
-        #                 if not new[x][y] == 1:
-        #                     new[x][y] = self.state[x][y - 1]
-        #         except Exception as e:
-        #             self.done = True
-
-        if self.frame % 10 == 0:
-            new[floor(random() * len(self.state))][0] = 2
 
         self.frame += 1
         self.score += 1 
@@ -140,17 +142,19 @@ def drawState(screen,pygame,data,frame):
             col = [
                 (255,255,255),
                 (0,0,255),
+                (0,255,0),
                 (255,0,0)
             ][state[x][y]]
 
             pygame.draw.rect(screen, col, (x * res, y * res, x * res + res, y * res + res))
 
-    label = font.render(str(genration) + ' ' + str(frame), 1, (0,0,0))
+    label = font.render(str(genration) + ' ' + str(data['score']), 1, (0,0,0))
     screen.blit(label, (0,0))
 
 def index_2d(myList, v):
     for i, x in enumerate(myList):
         if v in x:
             return (i, x.index(v))
+    return None
 
 

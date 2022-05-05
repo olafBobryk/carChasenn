@@ -10,14 +10,14 @@ class Pool():
         self.population = [];
         self.generation = 0;
 
-        for i in range(10):
+        for i in range(30):
             self.population.append({
                 'game': Game(),
-                'network': Network([864,2,3])
+                'network': Network([865,24,3])
             })
 
 
-    def live(self,record):
+    def live(self):
         while True:
             done = True
 
@@ -32,14 +32,15 @@ class Pool():
 
             if done: break
 
-        return self.nextGeneration(record);
+        return self.nextGeneration();
 
-    def nextGeneration(self,record):
+    def nextGeneration(self):
 
         self.population = sorted(self.population, key=lambda d: d['game'].score) 
         self.population.reverse()
 
         record = self.population[0]['game'].record
+        score =  self.population[0]['game'].score
 
         nextPopulation = [];
 
@@ -70,7 +71,8 @@ class Pool():
 
         return {
             'record': record,
-            'generation': self.generation
+            'generation': self.generation,
+            'score': score
         }
 
 
