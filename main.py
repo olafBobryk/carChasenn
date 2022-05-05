@@ -4,80 +4,65 @@ from network import Network
 from game import Game, drawState
 from functions import *
 from threading import Thread
+import time
+
+pygame.init()
+
+screen = pygame.display.set_mode((24 * 10,36 * 10))
+
+pygame.display.set_caption("carChasenn")
+
+screen.fill((0,0,0))
+
+
 
 pool = Pool()
-record = False;
+global data
+data = False
 
-def action(record):
-    record = pool.live(record)
+def action():
+    while True:
+        global data
+        if data:
+            pool.live(data)
+        else:
+            data = pool.live(data)
 
-def drawGameState(record):
-    if record:
-        ...
-
+frame = 0
 
 if __name__ == '__main__':
-    Thread(target = action, args =(record,)).start()
-    Thread(target = drawGameState, args =(record,)).start()
-    # Thread(target = func2).start()
-
-# pair = {
-#     'network': Network([864,2,3]),
-#     'game': Game()
-# }
-
-    # pair.get('game').nextTurn(pair.get('network'))
+    Thread(target = action).start()
 
 
-# setInterval(1 / 2,action)
+while True:
+    # global frame
+    # global record
+
+    time.sleep(1 / 30)
+
+    screen.fill((0,0,0))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            quit()
+    if data:
 
 
+        drawState(screen,pygame,data,frame)
+        
+        pygame.display.update()
+
+        frame += 1
+
+        if frame >= len(data['record']):
+            frame = 0
+            data = False
 
 
-
-
-
-
-# pygame.init()
-
-# screen = pygame.display.set_mode((24 * 10,36 * 10))
-# clock = pygame.time.Clock()
-
-# pygame.display.set_caption("carChasenn")
-
-# screen.fill((0,0,0))
-    
-# pair = {
-#     'network': Network([864,2,3]),
-#     'game': Game()
-# }
-
-# def action():
-#     screen.fill((0,0,0))
-
-#     pair.get('game').nextTurn(pair.get('network'))
-
-#     drawState(screen,pygame,pair['game'].state,pair['game'].score)
-    
-#     # print(g['frame'])
+setInterval(1 / 2,action=show)
 
 
 
-# while True:
-#     print(1)
-#     clock.tick(3)
-#     print(2)
-
-#     action()
-
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             quit()
-
-
-#     action()
-
-#     pygame.display.update()
 
 
 

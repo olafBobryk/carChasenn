@@ -98,7 +98,14 @@ class Game():
 
 
 
-def drawState(screen,pygame,state,score):
+def drawState(screen,pygame,data,frame):
+
+    font = pygame.font.SysFont("monospace", 15)
+
+    
+
+    state = data['record'][frame]
+    genration = data['generation']
 
     res = screen.get_width() / len(state)
 
@@ -112,6 +119,9 @@ def drawState(screen,pygame,state,score):
             ][state[x][y]]
 
             pygame.draw.rect(screen, col, (x * res, y * res, x * res + res, y * res + res))
+
+    label = font.render(str(genration) + ' ' + str(frame), 1, (0,0,0))
+    screen.blit(label, (0,0))
 
 
 

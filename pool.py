@@ -68,8 +68,10 @@ class Pool():
         self.generation += 1
         self.population  = nextPopulation
 
-        return record
-    
+        return {
+            'record': record,
+            'generation': self.generation
+        }
 
 
 

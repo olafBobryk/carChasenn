@@ -26,7 +26,6 @@ class Network:
                         continue
 
                     for c in range(layers[i - 1]):
-                        # print(self.net[i][j].weights)
                         self.net[i][j]['weights'].append(random() * 2 - 1)
             
             del self.net[0]
@@ -42,17 +41,14 @@ class Network:
 
         for i in range(len(self.net)):
             activation.append([])
-            # activation[i + 1] = []
 
             for j in range(len(self.net[i])):
 
                 def weightedSum(x,idx):
                     return x * activation[i][idx]
 
-                # print(activation[i])
                 weighted = [x * activation[i][idx] for idx,x in enumerate(self.net[i][j]['weights'])]
 
-                # sum = map(weightedSum, enumerate(self.net[i][j]['weights']))
 
                 def add(a,b):
                     a + b
