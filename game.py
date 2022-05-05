@@ -57,32 +57,57 @@ class Game():
         if self.done: 
             return
         
-        new = []
+        new = copy.deepcopy(self.state)
 
         for x in range(len(self.state)):
-            new.append([])
-            for y in range(len(self.state[x])):
-                new[x].append(0)
+            new[x].insert(0,0)
+
+            new[x].pop()
+
+        index = index_2d(new,1)
+
+        new[index[0]][index[1]] = 0;
+        
+        change = {'right' : 1,'left' : -1,'none' : 0}[dir]
 
 
-        for x in range(len(self.state)):
-            for y in range(len(self.state[x])):
-                try:
-                    if self.state[x][y - 1] == 1:
+        try:
+            if new[index[0] + change][index[1] - 1] == 2:
+                self.done = True
+            elif index[0] + change < 0 or index[0] + change >= len(self.state[0]):
+                self.done = True
+            else:
+                new[index[0] + change][index[1] - 1] = self.state[index[0]][index[1] - 1]
+        except:
+            self.done = True
 
-                        change = {'right' : 1,'left' : -1,'none' : 0}[dir]
 
-                        if new[x + change][y - 1] == 2:
-                            self.done = True
-                        elif x + change < 0 or x + change >= len(self.state[0]):
-                            self.done = True
-                        else:
-                            new[x + change][y - 1] = self.state[x][y - 1]
-                    else:
-                        if not new[x][y] == 1:
-                            new[x][y] = self.state[x][y - 1]
-                except Exception as e:
-                    self.done = True
+
+
+        # for x in range(len(self.state)):
+        #     new.append([])
+        #     for y in range(len(self.state[x])):
+        #         new[x].append(0)
+
+
+        # for x in range(len(self.state)):
+        #     for y in range(len(self.state[x])):
+        #         try:
+        #             if self.state[x][y - 1] == 1:
+
+        #                 change = {'right' : 1,'left' : -1,'none' : 0}[dir]
+
+        #                 if new[x + change][y - 1] == 2:
+        #                     self.done = True
+        #                 elif x + change < 0 or x + change >= len(self.state[0]):
+        #                     self.done = True
+        #                 else:
+        #                     new[x + change][y - 1] = self.state[x][y - 1]
+        #             else:
+        #                 if not new[x][y] == 1:
+        #                     new[x][y] = self.state[x][y - 1]
+        #         except Exception as e:
+        #             self.done = True
 
         if self.frame % 10 == 0:
             new[floor(random() * len(self.state))][0] = 2
@@ -123,5 +148,9 @@ def drawState(screen,pygame,data,frame):
     label = font.render(str(genration) + ' ' + str(frame), 1, (0,0,0))
     screen.blit(label, (0,0))
 
+def index_2d(myList, v):
+    for i, x in enumerate(myList):
+        if v in x:
+            return (i, x.index(v))
 
 
