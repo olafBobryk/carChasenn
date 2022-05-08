@@ -14,31 +14,16 @@ pygame.display.set_caption("carChasenn")
 
 screen.fill((0,0,0))
 
-
-
-pool = Pool()
-global data
-data = []
-
-def action():
-    while True:
-        global data
-        if len(data) > 1:
-            pool.live()
-        else:
-            data.append(pool.live())
+pair = {
+    'game': Game(),
+    'network': Network([864,2,3])
+}
 
 frame = 0
 
-if __name__ == '__main__':
-    Thread(target = action).start()
+while True: 
 
-
-while True:
-    # global frame
-    # global record
-
-    time.sleep(1 / 30)
+    time.sleep(1/ 30)
 
     screen.fill((0,0,0))
 
@@ -46,19 +31,68 @@ while True:
         if event.type == pygame.QUIT:
             quit()
 
-    if 0 < len(data):
+    if pair['game'].done:
+        pair = {
+            'game': Game(),
+            'network': pair['network']
+        }
+            
+    pair['game'].nextTurn(screen,pygame,pair['network'])
 
+    data = {
+        'record': [pair['game'].state],
+        'network': pair['network'].net,
+        'score': pair['game'].score
+    }
 
-        drawState(screen,pygame,data[0],frame)
+    drawState(screen,pygame,data,frame)
         
-        pygame.display.update()
+    pygame.display.update()
 
-        frame += 1
 
-        if frame >= len(data[0]['record']):
+# pool = Pool()
+# global data
+# data = []
 
-            frame = 0
-            del data[0]
+# def action():
+#     while True:
+#         global data
+#         if len(data) > 1:
+#             pool.live()
+#         else:
+#             data.append(pool.live())
+
+# frame = 0
+
+# if __name__ == '__main__':
+#     Thread(target = action).start()
+
+
+# while True:
+#     # global frame
+#     # global record
+
+#     time.sleep(1 / 30)
+
+#     screen.fill((0,0,0))
+
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             quit()
+
+#     if 0 < len(data):
+
+
+#         drawState(screen,pygame,data[0],frame)
+        
+#         pygame.display.update()
+
+#         frame += 1
+
+#         if frame >= len(data[0]['record']):
+
+#             frame = 0
+#             del data[0]
 
 
 

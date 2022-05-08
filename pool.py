@@ -13,7 +13,7 @@ class Pool():
         for i in range(30):
             self.population.append({
                 'game': Game(),
-                'network': Network([864,3,3])
+                'network': Network([864,1,3])
             })
 
 
