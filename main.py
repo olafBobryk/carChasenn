@@ -36,8 +36,9 @@ while True:
             'game': Game(),
             'network': pair['network']
         }
-            
-    pair['game'].nextTurn(screen,pygame,pair['network'])
+    
+    pair['game'].learn(pair['network'])
+    #pair['game'].nextTurn(screen,pygame,pair['network'])
 
     data = {
         'record': [pair['game'].state],

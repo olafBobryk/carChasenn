@@ -20,6 +20,45 @@ class Game():
 
         self.state[floor(len(self.state) / 2)][len(self.state[0]) - 2] = 1
 
+    def learn(self,network):
+        if self.done: return 
+
+        temp = copy.deepcopy(self.state)
+
+        index = index_2d(temp,1)
+
+        offset = index[0] - 12
+
+        if offset < 0:
+            for x in range(abs(offset)):
+                temp.insert(0,[3 for i in range(len(self.state[0]))])
+                del temp[-1]
+
+        if offset > 0:
+            for x in range(abs(offset)):
+                temp.append([3 for i in range(len(self.state[0]))])
+                del temp[0]
+
+        labels = self.label(temp)
+
+        inputs = np.array(temp)
+
+        inputs = inputs.ravel()
+
+        inputs = [x / 3 for x in inputs]
+
+        network.learn(inputs,labels)
+
+        outputs = network.calculate(inputs)
+
+        self.nextState(outputs)
+
+
+
+
+
+
+
     def nextTurn(self,screen,pygame,network):
         if self.done: return 
 
@@ -41,8 +80,6 @@ class Game():
 
         outputs = self.label(screen,pygame,temp)
 
-        print(outputs)
-
         # inputs = np.array(temp)
 
         # inputs = inputs.ravel()
@@ -53,7 +90,7 @@ class Game():
 
         self.nextState(outputs)
 
-    def label(self,screen,pygame,arr):
+    def label(self,arr):
         #print(np.matrix(np.rot90(arr)))
 
         points = [0 for x in range(len(arr))]
@@ -89,7 +126,6 @@ class Game():
             
             points = temp
 
-        print(points)
         return [x for i,x in enumerate(points) if index[0] + 1 == i or index[0] == i or index[0] - 1 == i]
 
 
